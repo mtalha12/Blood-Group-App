@@ -74,6 +74,10 @@ class Accepter extends Component{
     needAccepterHandler =(event) =>{
       this.props.history.push(`/donorslist/${this.state.bloodGroup}/${this.state.city}`);
     }
+
+    cheekInput(){
+      return!(this.state.city.length && this.state.bloodGroup.length)
+    }
     
     render(){
         const { classes } = this.props;
@@ -106,7 +110,16 @@ class Accepter extends Component{
             <MenuItem value={"ab"}>AB</MenuItem>
           </Select>
             <br />
-            <Button size="small" type='Button' onClick={this.needAccepterHandler} variant="contained" color="primary" className={classes.button}>Click here</Button>
+            <Button
+            disabled={this.cheekInput()}
+            size="small" 
+            type='Button' 
+            onClick={this.needAccepterHandler} 
+            variant="contained"
+            color="primary" 
+            className={classes.button}>
+            Click here
+             </Button>
             </div>
         )
     }

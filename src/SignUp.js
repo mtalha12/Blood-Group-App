@@ -50,15 +50,6 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
   },
-  // root: {
-  //   display: 'flex',
-  // },
-  // formControl: {
-  //   margin: theme.spacing.unit * 3,
-  // },
-  // group: {
-  //   margin: `${theme.spacing.unit}px 0`,
-  // },
 });
 
 
@@ -72,14 +63,7 @@ class SignUp extends Component{
         password:'',
         repeatPassword:'',
         donor : false,
-      //  address:'',
-      //  city: '',
-      //  dateOfBirth:'',
-       // cellNumber:'',
-        // genderRadioGroup:{
-        //   male:false,
-        //   female:false
-        // }
+     
   }
 }
 componentWillMount(){
@@ -93,25 +77,12 @@ nameHandler = (event) => {
       [event.target.name]: event.target.value,
   })
 }
-// genderRadioGroupHandler=(event)=>{
-//   console.log(event.target.value);
-//   this.state
-// }
-//..{..firebase.auth().createUserWithEmailAndPassword(email, password)
-   // .catch(function(error) {
-      // Handle Errors here.
-   //   var errorCode = error.code;
-   //   var errorMessage = error.message;
-   //   if (errorCode == 'auth/weak-password') {
-   //     alert('The password is too weak.');
-   //   } else {
-   //     alert(errorMessage);
-   //   }
-   //   console.log(error);
-   // }); ..} 
 
 signUpClickHandler= (event) => {
-
+  if(this.state.repeatPassword !== this.state.password){
+    alert('Repeated password is uncorrect');
+  }
+  else{
   firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
   .then((data)=>{
     const { firstName, lastName, email, donor }= this.state;
@@ -122,10 +93,6 @@ signUpClickHandler= (event) => {
       lastName,
       email,
       donor,
-    //  address,
-    //  city,
-    //  dateOfBirth,
-    //  cellNumber,
     }
     firebase.database().ref('user').child(data.user.uid).set(obj).then((resolve) => {
           this.props.history.push('/');
@@ -137,14 +104,11 @@ signUpClickHandler= (event) => {
     var errorCode = error.code;
     var errorMessage = error.message;
       });
-  // if(this.state.password === this.state.repeatPassword){
-  //   firebase.database().ref('user').push(this.state).then((resolve) => {
-  //     this.props.history.push('./home')
-  //   })
-  // }
-  // else{
-  //   alert('Your Password is');
-  // }
+    }
+}
+
+checkInput(){
+  return!(this.state.firstName.length && this.state.lastName.length)
 }
   
 render(){
@@ -212,56 +176,7 @@ render(){
           placeholder="Please Enter"
           />
           <br />
-       {/* <TextField
-       onChange={this.nameHandler}
-          id="address"
-          name="address"
-          label="Address"
-          className={classes.textField}
-          type="text"
-          autoComplete="current-password"
-          margin="normal"
-          placeholder="Please Enter"
-          />
-          <br />
-          <TextField
-       onChange={this.nameHandler}
-          id="city"
-          name="city"
-          label="City"
-          className={classes.textField}
-          type="text"
-          autoComplete="current-password"
-          margin="normal"
-          placeholder="Please Enter"
-          />
-          <br />
-       <TextField
-       onChange={this.nameHandler}
-          id="cellNumber"
-          name="cellNumber"
-          label="Cell Number"
-          className={classes.textField}
-          type="number"
-          autoComplete="current-password"
-          margin="normal"
-          placeholder="Please Enter"
-          />
-          <br />
-          <br />
-          <TextField
-           onChange={this.nameHandler}
-          id="dateOfBirth"
-          name="dateOfBirth"
-          label="Date of Birth"
-          className={classes.textField}
-          type="date"
-          autoComplete="current-password"
-          margin="normal"
-          placeholder="Date of Birth"
-          />
-          <br /> */}
-          {/* <FormControl component="fieldset" className={classes.formControl}>
+                 {/* <FormControl component="fieldset" className={classes.formControl}>
           <FormLabel component="legend">Gender</FormLabel>
           <RadioGroup
             aria-label="Gender"
@@ -280,7 +195,15 @@ render(){
             />
           </RadioGroup>
         </FormControl> */}
-          <Button type='submit' onClick={this.signUpClickHandler}variant="contained" color="primary" className={classes.button}>SignUp</Button>
+          <Button 
+          disabled={this.checkInput()}
+          type='submit' 
+          onClick={this.signUpClickHandler}
+          variant="contained" 
+          color="primary" 
+          className={classes.button}>
+          SignUp
+          </Button>
       </div>
   )
 }

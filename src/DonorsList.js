@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import * as firebase from 'firebase';
 import Accepter from './Accepter';
 
@@ -19,6 +20,12 @@ const styles = theme => ({
   table: {
     minWidth: 700,
   },
+  button: {
+    margin: theme.spacing.unit,
+  },
+  logOut: {
+   width: '300px'
+  }
 });
 
 class NeedBloodList extends Component {
@@ -63,6 +70,11 @@ class NeedBloodList extends Component {
     });
   }
 
+  logOut = (event)=>{
+    localStorage.removeItem('ID')
+    this.props.history.push('/ ')
+  }
+
 
   //class DonorList extends Component{
   //    function List(params) {
@@ -71,6 +83,7 @@ class NeedBloodList extends Component {
     console.log("this.props.history", this.props.history);
     const { classes } = this.props;
     return (
+      <div>
       <Paper className={classes.root}>
         <Table className={classes.table}>
           <TableHead>
@@ -93,12 +106,21 @@ class NeedBloodList extends Component {
                   <TableCell align="right">{donor.bloodGroup}</TableCell>
                   <TableCell align="right">{donor.address}</TableCell>
                 </TableRow>
-
               })
             }
           </TableBody>
         </Table>
       </Paper>
+      <br />
+        <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}><Button 
+        onClick={this.userLogOut} 
+        variant="contained" 
+        color="primary" 
+        className={[classes.button, classes.logOut].join(' ')}>
+            Log Out
+          </Button>
+          </div>
+          </div>
     );
   };
 

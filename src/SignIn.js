@@ -11,15 +11,20 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import * as firebase from 'firebase';
 import './FirebaseConfig';
-  
+   
 const styles = {
     card: {
-        maxWidth: 345, 
-        
+    width:'380px'
     },
     media: {
         height: 140,
     },
+    signIn : {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems : 'center',
+        height: '100vh'
+    }
     
 };
 
@@ -46,12 +51,7 @@ class SignIn extends Component {
             [event.target.name]: event.target.value,
         })
       }
-      //..{..firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-  // Handle Errors here.
-  //var errorCode = error.code;
-  //var errorMessage = error.message;
-  // ...
-//});..}
+
       signInClickHandler = (event) => {
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
         .then((result)=>{
@@ -63,8 +63,6 @@ class SignIn extends Component {
           //  })
             this.props.history.push('./home')
             console.log(result);
-           // const { email , password } = this.state;
-           // firebase.database().ref( )
         })
         .catch((error)=> {
             alert(error)
@@ -101,7 +99,7 @@ class SignIn extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <div align='center'>
+            <div  className={classes.signIn}>
             <Card className={classes.card}>
                 <CardActionArea>
                     
@@ -135,9 +133,23 @@ class SignIn extends Component {
                     </CardContent>
                 </CardActionArea>
                 <CardActions>
-                <Button type='submit' onClick={this.signInClickHandler}variant="contained" color="primary" className={classes.button}>SignIn</Button>
+                <Button 
+                type='submit' 
+                onClick={this.signInClickHandler}
+                variant="contained" 
+                color="primary" 
+                className={classes.button}>
+                SignIn
+                </Button>
 
-                <Button type='submit' onClick={this.signUpClickHandler}variant="contained" color="primary" className={classes.button}>SignUp</Button>
+                <Button 
+                type='submit' 
+                onClick={this.signUpClickHandler}
+                variant="contained" 
+                color="primary" 
+                className={classes.button}>
+                SignUp
+                </Button>
                 </CardActions>
             </Card>
             </div>

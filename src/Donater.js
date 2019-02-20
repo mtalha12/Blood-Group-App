@@ -3,6 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import * as firebase from 'firebase';
+import moment from "moment";
 import PropTypes from 'prop-types';
 import Input from '@material-ui/core/Input';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
@@ -65,10 +66,8 @@ class DonarDetails extends Component {
     constructor(){
         super();
         this.state = {
-        //    firstName:'',
-        //    lastName:'',
             age : '',
-            lastDonateDate: '',
+            lastDonateDate: new Date(),
             address : '',
             city: '',
             cellNumber: '',
@@ -100,17 +99,23 @@ class DonarDetails extends Component {
      //console.log(firstName);
     }
     nameHandler = (event)=>{
-        console.log(event.target.value);
+      //  console.log(event.target.value);
         this.setState({
             [event.target.name] : event.target.value,
           })
         }
         donarDetailsHandler = (event)=>{
-          this.checkLastDonateDate();
-      let donorsUsers = localStorage.getItem('ID');
-      const { age, lastDonateDate, address, city, bloodGroup, cellNumber} = this.state;
-      firebase.database().ref('user/'+ donorsUsers).update({
-        
+         // this.checkLastDonateDate();
+          let donorsUsers = localStorage.getItem('ID');
+          let checkDiffrenet = moment(this.state.lastDonateDate).fromNow();
+      if(checkDiffrenet < '4 months ago'){
+       console.log( alert('Your are eligable for donate your blood.'));
+      }
+      else{
+
+        const { age, lastDonateDate, address, city, bloodGroup, cellNumber} = this.state;
+        firebase.database().ref('user/'+ donorsUsers).update({
+          
         //firebase.database().ref('Donors/'+ donorsUsers).set({
           age : age,
           lastDonateDate: lastDonateDate,
@@ -123,55 +128,26 @@ class DonarDetails extends Component {
         // })
         alert('Thank you for donate your blood.');
         this.props.history.push('/home');
+      }
         
-    }
-    checkLastDonateDate(){
-          let userDate = new Date(this.state.lastDonateDate);
-          let converter = userDate.getTime();
-          converter =converter/(1000*60*60*24)
-      console.log('Time Now :' + converter);
-
-      const currentMonth = new Date().getTime();
-      console.log(currentMonth);
-
-    }
+      }
+      
+      checkInput = () => {
+      console.log(this.state.age.length && this.state.bloodGroup.length && this.state.lastDonateDate.length && this.state.city.length && this.state.cellNumber.length)
+      return !(this.state.age.length && this.state.bloodGroup.length && this.state.lastDonateDate.length && this.state.city.length && this.state.cellNumber.length)
+    } 
 
     render(){
         const { classes } = this.props;
         return(
             <div align='center'>
             <h2>Your Details</h2>
-                {/* <TextField
-       onChange={this.nameHandler}
-          id="firstName"
-          name="firstName"
-          label="First Name"
-          value={this.state.firstName}
-          className={classes.textField}
-          type="text"
-          autoComplete="current-password"
-          margin="normal"
-          placeholder="Please Enter"
-          />
-          <br />
-          <TextField
-       onChange={this.nameHandler}
-          id="lastNmae"
-          name="lastName"
-          label="Last Name"
-          value={this.state.lastName}
-          className={classes.textField}
-          type="text"
-          autoComplete="current-password"
-          margin="normal"
-          placeholder="Please Enter"
-          />
-          <br /> */}
            <TextField
        onChange={this.nameHandler}
           id="age"
           name="age"
           label="Age"
+          required=" "
           value={this.state.dateOfBirth}
           className={classes.textField}
           type="number"
@@ -249,9 +225,18 @@ class DonarDetails extends Component {
 
           <br />
 
-          <Button  type='Button' onClick={this.donarDetailsHandler} variant="contained" color="primary" className={classes.button}>Click here</Button>
+          <Button 
+            disabled={this.checkInput()} 
+            type='Button' 
+            onClick={this.donarDetailsHandler}  
+            variant="contained" 
+            color="primary" 
+            className={classes.button}
+          >
+            Click here
+          </Button>
 
-           
+
             </div>
         )
     }

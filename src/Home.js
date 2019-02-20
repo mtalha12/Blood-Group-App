@@ -34,8 +34,11 @@ const styles = theme => ({
   pos: {
     marginBottom: 12,
   },
-  signout:{
-    width:10
+  button: {
+    margin: theme.spacing.unit,
+  },
+  logOut:{
+    width:250,
   }
 });
 
@@ -56,6 +59,11 @@ class Home extends Component {
 
     accepterClickHandler = (event) => {
       this.props.history.push('./Accepter')
+    }
+
+    userLogOut =(event)=>{
+      localStorage.removeItem('ID')
+      this.props.history.push('/')
     }
     render() {
       const { classes } = this.props
@@ -116,10 +124,14 @@ class Home extends Component {
     </Card>
     <br/>
         </div>
-    {/* <Button id='signout' type='Button' onClick={this.userClickSignOut} variant="contained" color="primary" className={classes.button}>Sign Out</Button> */}
         </Grid>
         <Grid item xs={3}></Grid>
         </Grid>
+        <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+          <Button onClick={this.userLogOut} variant="contained" color="primary" className={[classes.button, classes.logOut].join(' ')}>
+            Log Out
+          </Button>
+        </div>
         </div> 
       );  
     }
